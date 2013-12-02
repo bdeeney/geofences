@@ -22,6 +22,7 @@ $ python geofences
 ```
 
 ### Running the Test Suite
+To run the test suite:
 ```bash
 $ nosetests -v
 ```
