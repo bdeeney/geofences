@@ -25,6 +25,16 @@ class User(object):
         """Return a dictionary view of the user's configured locations."""
         return self._is_at.viewkeys()
 
+    def get_status(self):
+        """
+        Whether the user is at each of their locations.
+
+        Returns a dict of (location, status) pairs where the boolean status
+        value indicates whether the user is at the corresponding location.
+
+        """
+        return self._is_at.copy()
+
     def move(self, delta_x, delta_y):
         """Move the user in 2-D space.
 
@@ -33,7 +43,7 @@ class User(object):
 
         """
         self.position.move(delta_x, delta_y)
-        self._update_location_status()
+        self._update_status()
 
     def move_to(self, point, steps=100):
         """Move the user in a straight line to the given `point`.
@@ -42,15 +52,12 @@ class User(object):
         destination.
 
         """
-        print '{0!s} begins moving from {0.position} to {1}.' \
-            .format(self, point)
         delta_x = (point.x - self.position.x) / steps
         delta_y = (point.y - self.position.y) / steps
         for i in xrange(steps):
             self.move(delta_x, delta_y)
-        print '{0!s} now at {0.position}.'.format(self)
 
-    def _update_location_status(self):
+    def _update_status(self):
         """Update the user's status relative to configured locations."""
         for location, was_at in self._is_at.iteritems():
             self._is_at[location] = self in location

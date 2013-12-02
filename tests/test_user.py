@@ -82,3 +82,16 @@ class WhenDepartingFromLocation(unittest.TestCase):
 
     def should_emit_departure_signal(self):
         self.callback.assert_called_with(self.user, location=self.home)
+
+
+class WhenQueryingUserStatus(unittest.TestCase):
+
+    def should_return_location_status(self):
+        home = Geofence('Home', radius=5),
+        school = Geofence('School', center=(10, 10), radius=6)
+        park = Geofence('Park', center=(10, 5), radius=1)
+        user = User('Alice', position=Point(10, 4),
+                    locations=[home, school, park])
+
+        self.assertEqual(user.get_status(),
+                         {home: False, school: True, park: True})
